@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	ViewBag.NgAppName = "SearchNgApp";
+	ViewBag.Title = ViewBag.SearchTerm + " - youmoto";
+}
+
+@section scripts{
+	<script type="text/javascript">
+		var globalSearchTerm = '@ViewBag.SearchTerm';
+	</script>
+	<script src="~/Scripts/Ng/SearchNgApp.js"></script>
+}
+
+<div id="search_index" ng-controller="SearchNgController" ng-cloak>
+	<h1>search</h1>
+	<div class="content">
+		<div>You searched for: {{matchingSearchTerm}}</div>
+	</div>
+	<div id="search_hit_list" ng-cloak>
+		<a href="{{runner.targetUrl}}" ng-repeat="runner in hits">
+			<div class="item">
+				<div class="image_sizer">
+					<img src="~/Style/Images/loading.gif" ng-src="{{runner.teaserImageUrl}}" alt="{{runner.title}}" />
+				</div>
+				<h2>
+					{{runner.title}}
+				</h2>
+			</div>
+		</a>
+	</div>
+	<img src="~/Style/Images/loading.gif" ng-show="isLoading" class="loading" alt="loading..." />
+</div>

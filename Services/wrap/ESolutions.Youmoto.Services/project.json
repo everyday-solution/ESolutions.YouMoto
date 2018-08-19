@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0-*",
+  "frameworks": {
+    "net452": {
+      "wrappedProject": "../../ESolutions.Youmoto.Services.csproj",
+      "bin": {
+        "assembly": "../../obj/{configuration}/ESolutions.Youmoto.Services.dll",
+        "pdb": "../../obj/{configuration}/ESolutions.Youmoto.Services.pdb"
+      },
+      "dependencies": {
+        "EntityFramework": "6.1.0",
+        "Microsoft.AspNet.Identity.Core": "2.2.1",
+        "Microsoft.AspNet.Identity.EntityFramework": "2.2.1",
+        "Microsoft.AspNet.Identity.Owin": "2.2.1",
+        "Microsoft.Owin": "2.1.0",
+        "Microsoft.Owin.Security": "2.1.0",
+        "Microsoft.Owin.Security.Cookies": "2.1.0",
+        "Microsoft.Owin.Security.OAuth": "2.1.0",
+        "Newtonsoft.Json": "4.5.11",
+        "Owin": "1.0.0",
+        "ESolutions.Youmoto.Model": "1.0.0-*",
+        "EntityFramework.SqlServer": "1.0.0-*"
+      }
+    }
+  }
+}

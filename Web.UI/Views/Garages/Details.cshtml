@@ -1,0 +1,24 @@
+﻿@model ESolutions.Youmoto.Web.UI.Models.GarageViewModels.Details
+@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	ViewBag.Title = this.Model.Title + " - youmoto";
+}
+
+<div id="garage_details">
+	<h1>@Model.Title</h1>
+	@foreach (var runner in Model.GaragePictures)
+	{
+		<div class="item">
+			<div class="image">
+				<a data-fancybox="group" data-caption="@runner.TextTeaser" href="@Url.Action("Render","Pictures", new { Guid = runner.PictureGuid})">
+					<img src="@Url.Action("Render","Pictures", new { Guid = runner.PictureGuid, Width = 400 })" />
+				</a>
+			</div>
+			<div class="text">
+				@runner.Text
+			</div>
+		</div>
+	}
+</div>

@@ -1,0 +1,114 @@
+﻿@model ESolutions.Youmoto.Web.UI.Models.VehicleViewModel.Details
+@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@using ESolutions.Youmoto.I18N
+@{
+	ViewBag.Title = this.Model.Title + " - youmoto";
+}
+
+<div id="vehicle_details">
+	<h1>@Model.Title</h1>
+	<div class="content">
+		<h2>
+			@StringTable.Manufacturer
+		</h2>
+		<div id="manufacturer_list">
+			@foreach (var runner in Model.Manufacturers)
+			{
+				<a href="@Url.Action("Details", "Manufacturers", new { Guid = runner.Guid })">
+					<div class="manufacturer">
+						<img src="@Url.Action("Render", "Pictures", new { Guid = runner.PictureGuid, Height = 100 })" alt="@runner.Name" />
+						<span>@runner.Name</span>
+					</div>
+				</a>
+			}
+		</div>
+	</div>
+	@if (Model.Series.Any())
+	{
+		<div class="content">
+			<h2>@StringTable.Series</h2>
+			<div id="series_list">
+				@foreach (var seriesRunner in Model.Series)
+				{
+					<div class="series">
+						<h3>@seriesRunner.Name</h3>
+						<div id="series_vehicle_list">
+							@foreach (var vehicleRunner in seriesRunner.SeriesVehicles)
+							{
+								<div class="series_vehicle">
+									<a href="@Url.Action("Details", "Vehicles", new { Guid = vehicleRunner.Guid })">
+										<img src="@Url.Action("Render", "Pictures", new { Guid = vehicleRunner.PictureGuid, Height = 100 })" alt="@vehicleRunner.Name" />
+										<span>@vehicleRunner.Name</span>
+									</a>
+								</div>
+							}
+						</div>
+					</div>
+				}
+			</div>
+		</div>
+	}
+	@if (Model.Garages.Any())
+	{
+		<div class="content">
+			<h2>@StringTable.Garages</h2>
+			<div id="garage_list">
+				@foreach (var garageRunner in Model.Garages)
+				{
+					<div class="garage">
+						<a href="@Url.Action("Details", "Garages", new { Guid = garageRunner.Guid })">
+							<img src="@Url.Action("Render", "Pictures", new { Guid = garageRunner.TeaserPictureGuid, Height = 100 })" alt="@garageRunner.Title" />
+							<span>@garageRunner.Title</span>
+						</a>
+					</div>
+				}
+			</div>
+		</div>
+	}
+	@if (Model.TechnicalData.Any())
+	{
+		<div class="content">
+			<h2>@StringTable.TechnicalDetails</h2>
+			<table class="techfact">
+				@foreach (var runner in Model.TechnicalData)
+				{
+					<tr>
+						<td>@runner.Key</td>
+						<td>@runner.Value</td>
+					</tr>
+				}
+			</table>
+		</div>
+	}
+	@if (Model.PicturesGuids.Any())
+	{
+		<div class="content">
+			<h2>@StringTable.Pictures</h2>
+			@foreach (var runner in Model.PicturesGuids)
+			{
+				<a data-fancybox="group" href="@Url.Action("Render", "Pictures", new { Guid = runner })">
+					<img class="image" src="@Url.Action("Render", "Pictures", new { Guid = runner, Width = 400 })" />
+				</a>
+			}
+		</div>
+	}
+	@if (Model.ArticleParts.Any())
+	{
+
+		<div class="content">
+			@foreach (var runner in Model.ArticleParts)
+			{
+				<h2 class="article_part">@runner.Key</h2>
+				<div>@Html.Raw(runner.Value)</div>
+			}
+		</div>
+	}
+	@if (!String.IsNullOrWhiteSpace(Model.WikipediaLink))
+	{
+		<div class="content">
+			<a href="@Model.WikipediaLink">@Model.WikipediaLink</a>
+		</div>
+	}
+</div>

@@ -1,0 +1,51 @@
+﻿@model ESolutions.Youmoto.Web.UI.Models.ManufacturerViewModel.Details
+@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@using ESolutions.Youmoto.I18N
+@{
+	ViewBag.Title = this.Model.Title + " - youmoto";
+}
+
+<div id="manufacturer_details">
+	<h1>@Model.Title</h1>
+	<h2>Vehicles in series</h2>
+	@foreach (var seriesRunner in this.Model.Series)
+	{
+		<h3>
+			@seriesRunner.Name (since @seriesRunner.BuiltFromYear)
+		</h3>
+		<div id="series_vehicle_list">
+			@foreach (var vehicleRunner in seriesRunner.VehicleTeasers)
+			{
+				<div class="item">
+					<div class="image_sizer">
+						<a href="@Url.Action("Details","Vehicles", new { Guid = vehicleRunner.Guid })">
+							<img src="@Url.Action("Render", "Pictures", new { Guid = vehicleRunner.PictureGuid, Height = 400 })" />
+						</a>
+					</div>
+					<h4>
+						@vehicleRunner.Name
+					</h4>
+				</div>
+				}
+		</div>
+	}
+	<h2>Seperate vehicles</h2>
+	<div id="vehicle_list">
+		@foreach (var runner in this.Model.Vehicles)
+		{
+			<div class="item">
+				<div class="image_sizer">
+					<a href="@Url.Action("Details","Vehicles", new { Guid = runner.Guid })">
+						<img src="@Url.Action("Render", "Pictures", new { Guid = runner.PictureGuid, Height = 400 })" />
+					</a>
+				</div>
+				<h4>
+					@runner.Name (since @runner.BuiltFromYear)
+				</h4>
+
+			</div>
+		}
+	</div>
+</div>

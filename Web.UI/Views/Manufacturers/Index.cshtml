@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	ViewBag.NgAppName = "ManufacturerNgApp";
+	ViewBag.Title = "Manufacturers - youmoto";
+}
+
+@section scripts{
+	<script src="~/Scripts/Ng/ManufacturerNgApp.js"></script>
+}
+
+<div id="manufacturer_index" ng-controller="ShowManufacturersNgController" ng-cloak>
+	<h1>makers</h1>
+	<div id="manufacturer_list" ng-cloak>
+		<a href="@Url.Action("Details", "Manufacturers")/{{runner.guid}}" ng-repeat="runner in manufacturers">
+			<div class="item">
+				<div class="image_sizer">
+					<img data-ng-src="@Url.Action("Render", "Pictures")/{{runner.logoImageGuid}}?height=200" alt="{{runner.title}}" />
+				</div>
+				<h2>
+					{{runner.title}}
+				</h2>
+			</div>
+		</a>
+		<img class="loading" src="~/Style/Images/loading.gif" ng-show="isLoading" alt="loading..." />
+	</div>
+</div>

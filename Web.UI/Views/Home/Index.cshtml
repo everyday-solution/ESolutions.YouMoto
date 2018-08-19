@@ -1,0 +1,79 @@
+﻿@{
+	ViewBag.NgAppName = "LandingPageNgApp";
+}
+
+@section scripts{
+	<script src="~/Scripts/Ng/LandingPageNgApp.js"></script>
+}
+
+<div id="landing_page" ng-controller="LandingPageNgController" ng-cloak>
+	<div id="news_panel" class="category">
+		<h1>
+			<a href="@Url.Action("Index","News")">
+				news
+			</a>
+		</h1>
+		<div id="news_list">
+			<a href="@Url.Action("Details", "News")/{{runner.guid}}" ng-repeat="runner in news">
+				<div class="item">
+					<div class="image_sizer">
+						<img src="~/Style/Images/loading.gif"  ng-src="{{runner.teaserImageUrl}}" alt="{{runner.title}}" />
+					</div>
+					<h2>
+						{{runner.title}}
+					</h2>
+					<span>
+						{{runner.textTeaser}}
+					</span>
+				</div>
+			</a>
+			<img src="~/Style/Images/loading.gif" alt="loading..." ng-show="isLoadingNews" class="loading" />
+		</div>
+	</div>
+	<div id="garage_panel" class="category">
+		<h1>
+			<a href="@Url.Action("Index","Garages")">
+				garages
+			</a>
+		</h1>
+		<div id="garage_list">
+			<a href="@Url.Action("Details","Garages")/{{runner.guid}}" ng-repeat="runner in garages">
+				<div class="item">
+					<div class="image_sizer">
+						<img src="~/Style/Images/loading.gif"  ng-src="@Url.Action("Render","Pictures")/{{runner.teaserImageGuid}}?width=300" />
+					</div>
+					<h2>
+						{{runner.title}}
+					</h2>
+					<span>
+						{{runner.textTeaser}}
+					</span>
+				</div>
+			</a>
+			<img src="~/Style/Images/loading.gif" alt="loading..." ng-show="isLoadingGarages" class="loading"/>
+		</div>
+	</div>
+	<div id="vehicles_panel" class="category">
+		<h1>
+			<a href="@Url.Action("Index","Vehicles")">
+				vehicles
+			</a>
+		</h1>
+		<div id="vehicle_list">
+			<a href="@Url.Action("Details","Vehicles")/{{runner.guid}}" ng-repeat="runner in vehicles">
+				<div class="item">
+					<div class="image_sizer">
+						<img src="~/Style/Images/loading.gif"  ng-src="@Url.Action("Render","Pictures")/{{runner.teaserImageGuid}}?width=300" />
+					</div>
+					<h2>
+						{{runner.title}}
+					</h2>
+					<span>
+						{{runner.textTeaser}}
+					</span>
+				</div>
+			</a>
+			<img src="~/Style/Images/loading.gif" alt="loading..." ng-show="isLoadingVehicles" class="loading" />
+		</div>
+	</div>
+</div>

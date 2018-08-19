@@ -1,0 +1,22 @@
+﻿[
+  {
+    "outputFile": "Style/screen.css",
+    "inputFile": "Style/screen.less",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "sourceMap": false,
+    "options": {}
+  },
+  {
+    "outputFile": "Style/mobile.css",
+    "inputFile": "Style/mobile.less",
+    "minify": {
+      "enabled": true
+    },
+    "includeInProject": true,
+    "sourceMap": false,
+    "options": {}
+  }
+]

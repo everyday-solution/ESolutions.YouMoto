@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	var imageNo = new Random().Next(0, 10);
+	var backgroundUrl = "~/Style/Images/Backgrounds/{0}.jpg".Replace("{0}", imageNo.ToString("00"));
+
+	var currentUser =
+		this.User != null && this.User.Identity.IsAuthenticated ?
+		this.Context.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(this.User.Identity.GetUserId()) :
+		new ApplicationUser();
+}
+
+<!DOCTYPE html>
+<html style="background-image:url('@Url.Content(backgroundUrl)')">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title</title>
+	<meta http-equiv="language" content="@ViewBag.Language" />
+	<meta name="keywords" content="automotive, cars, bikes, showrooms" />
+	<meta name="description" content="passion for mobility - cars, bikes, stories" />
+	<meta name="author" content="(c) Tobias Mundt - everyday solutions" />
+	<meta name="page-topic" content="Automotive" />
+	<meta name="robots" content="index,follow" />
+	<meta name="revisit-after" content="1 week" />
+	<meta name="audience" content="all" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="180x180" href="~/style/favicon/apple-touch-icon.png">
+	<link rel="icon" type="image/png" href="~/style/favicon/favicon-32x32.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="~/style/favicon/favicon-16x16.png" sizes="16x16">
+	<link rel="manifest" href="~/style/favicon/manifest.json">
+	<link rel="mask-icon" href="~/style/favicon/safari-pinned-tab.svg" color="#5bbad5">
+
+	@Styles.Render("~/bundles/css")
+	<script>
+		(function (i, s, o, g, r, a, m) {
+		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+			(i[r].q = i[r].q || []).push(arguments)
+		}, i[r].l = 1 * new Date(); a = s.createElement(o),
+			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+		ga('create', 'UA-20983573-1', 'auto');
+		ga('send', 'pageview');
+
+	</script>
+	<style type="text/css">
+		html, body {
+			background-color: transparent !important;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div id="main_menu_panel">
+			<div>
+				<a id="youmoto_logo" href="~/">
+					<img src="~/Style/Images/youmoto.png" />
+				</a>
+			</div>
+			<div>
+				@using (Html.BeginForm("Index", "Search", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+				{
+					<input id="searchTerm" placeholder="SEARCH..." name="searchTerm" value="@ViewBag.SearchTerm" />
+					<input type="submit" style="display:none" />
+				}
+				<div id="collapsed_menu">
+					menu
+				</div>
+				<div id="combined_menu">
+					<ul id="primary_menu">
+						<li><a href="@Url.Action("Index", "News")">news</a></li>
+						<li><a href="@Url.Action("Index", "Vehicles")">cars</a></li>
+						<li><a href="@Url.Action("Index", "Manufacturers")">makers</a></li>
+						<li><a href="@Url.Action("Index", "Garages")">showrooms</a></li>
+						<li><a href="@Url.Action("Index", "Garages", new { type = GarageTypes.TechnicTip })">technictips</a></li>
+
+					</ul>
+					<ul id="secoundary_menu">
+						@if (this.User.Identity.IsAuthenticated)
+						{
+							<li id="myaccount_menu_link">
+								<a href="@Url.Action("Index", "Manage")">MY ACCOUNT</a>
+							</li>
+						}
+						else
+						{
+							if (this.ViewBag.AdminMode == true)
+							{
+								<li id="login_menu_link">
+									<a href="@Url.Action("Login", "Account")">LOGIN</a>
+								</li>
+							}
+						}
+						<li><a href="@Url.Action("Contact", "Home")">contact</a></li>
+						<li><a href="@Url.Action("About", "Home")">terms</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		@if (this.ViewBag.AdminMode == true)
+		{
+			@Html.Partial("_UserPartialView", currentUser)
+		}
+	</header>
+	<main>
+		@RenderBody()
+	</main>
+	@Scripts.Render("~/bundles/jquery")
+	<script type="text/javascript" src="~/signalr/hubs"></script>
+	@RenderSection("scripts", required: false)
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var appName = '@ViewBag.NgAppName';
+
+			if (appName !== '') {
+				$.connection.hub.start().done(function () {
+					angular.bootstrap(document, [appName]);
+				});
+			}
+
+			$('#collapsed_menu').click(function () {
+				$('#combined_menu').toggle();
+			});
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+﻿@model ESolutions.Youmoto.Persistence.ApplicationUser
+
+
+@if (!this.Request.IsAuthenticated)
+{
+	<div id="login_panel">
+		@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+		{
+			@Html.AntiForgeryToken()
+			<div>
+				<input tabindex="1" name="Email" type="email" placeholder="EMAIL" /><br />
+				<a href="@Url.Action("Register", "Account")">Register now!</a>
+			</div>
+			<div>
+				<input tabindex="2" name="Password" type="password" placeholder="PASSWORD" /><br />
+				<input name="RememberMe" type="checkbox" value="true" style="display:none;" />
+				<a href="@Url.Action("ForgotPassword", "Account")">Forgotten password?</a>
+			</div>
+			<div>
+				<input type="submit" tabindex="3" value="Log in" />
+			</div>
+		}
+	</div>
+}
+else
+{
+	<div id="user_panel">
+		<div>
+			<div class="social">
+				<img alt="Share on facebook" src="~/Style/Images/FacebookLogo.jpg" />
+				<img alt="Share on twitter" src="~/Style/Images/TwitterLogo.jpg" />
+			</div>
+			<div class="username">
+				<a href="@Url.Action("Index", "Manage")">
+					@this.Model.DisplayName
+				</a>
+			</div>
+			<div id="logoff">
+				@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+				{
+					@Html.AntiForgeryToken()
+					<a href="javascript:document.getElementById('logoutForm').submit()">LOG OFF</a>
+				}
+			</div>
+		</div>
+		<div>
+			<a href="@Url.Action("Index", "Manage")">
+				@if (this.Model.PictureGuid.HasValue)
+				{
+					<img class="userimage" src="@Url.Action("Index", "Pictures", new { id = this.Model.PictureGuid.Value })" alt="@this.Model.DisplayName" />
+				}
+				else
+				{
+					<img class="userimage" src="~/Style/Images/NoUserImage.jpg" alt="@this.Model.DisplayName" />
+				}
+			</a>
+		</div>
+	</div>
+}

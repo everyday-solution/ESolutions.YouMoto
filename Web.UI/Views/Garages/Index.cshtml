@@ -1,0 +1,30 @@
+﻿@using ESolutions.Youmoto.Persistence;
+
+@{
+	ViewBag.NgAppName = "GarageNgApp";
+}
+
+@section scripts{
+	<script src="~/Scripts/Ng/GarageNgApp.js"></script>
+	<script type="text/javascript">
+		var garageMode = "@this.ViewBag.GarageType.ToString()";
+	</script>
+}
+
+<div ng-controller="ShowGaragesNgController">
+	<h1>@(this.ViewBag.GarageType == GarageTypes.Showroom ? "showrooms" : "technictips")</h1>
+	<div id="garages">
+		<a href="@Url.Action("Details", "Garages")/{{runner.guid}}" ng-repeat="runner in garages" ng-cloak>
+			<div class="item">
+				<div class="image_sizer">
+					<img ng-src="@Url.Action("Render","Pictures")/{{runner.teaserImageGuid}}?width=300" />
+				</div>
+				<h2>{{runner.title}}</h2>
+				<div class="text">
+					{{runner.textTeaser}}
+				</div>
+			</div>
+		</a>
+	</div>
+	<img src="~/Style/Images/loading.gif" ng-show="isLoading" alt="loading..." class="loading"/>
+</div>

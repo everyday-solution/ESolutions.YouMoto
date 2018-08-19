@@ -1,0 +1,47 @@
+﻿@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	ViewBag.NgAppName = "NewsNgApp";
+	ViewBag.Title = "News - youmoto";
+	ViewBag.IsAdmin = ApplicationUserManager.IsAdmin(this.User, this.Context);
+}
+
+@section scripts{
+	<script src="~/Scripts/Ng/NewsNgApp.js"></script>
+}
+
+<div id="news_index" ng-controller="ShowNewsNgController" ng-cloak>
+	@if (this.ViewBag.IsAdmin)
+	{
+		<h1>news<md-button class="md-raised md-primary" ng-click="togglePanel('create')">new</md-button></h1>
+		<div class="expandable" ng-class="getToggleState('create')">
+			<div>
+				<input name="title" type="text" placeholder="Electric cars on the rise..." ng-model="title" />
+			</div>
+			<div>
+				<md-button class="md-raised md-primary" ng-click="createNews()">save</md-button>
+			</div>
+		</div>
+	}
+	else
+	{
+		<h1>news</h1>
+	}
+	<div ng-cloak>
+		<a href="@Url.Action("Details", "News")/{{runner.guid}}" ng-repeat="runner in news">
+			<div class="item">
+				<div class="image_sizer">
+					<img ng-src="{{runner.teaserImageUrl}}" alt="{{runner.title}}" />
+				</div>
+				<h2>
+					{{runner.title}}
+				</h2>
+				<div class="text">
+					{{runner.textTeaser}}
+				</div>
+			</div>
+		</a>
+	</div>
+	<img src="~/Style/Images/loading.gif" ng-show="isLoading" alt="loading..." class="loading" />
+</div>

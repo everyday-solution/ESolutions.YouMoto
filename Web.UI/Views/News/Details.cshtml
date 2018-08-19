@@ -1,0 +1,139 @@
+﻿@model ESolutions.Youmoto.Web.UI.Models.NewsViewModel.Details
+@using Microsoft.AspNet.Identity
+@using ESolutions.Youmoto.Persistence
+@using Microsoft.AspNet.Identity.Owin
+@{
+	ViewBag.NgAppName = "NewsNgApp";
+	ViewBag.Title = this.Model.Title + " - youmoto";
+	ViewBag.IsAdmin = ApplicationUserManager.IsAdmin(this.User, this.Context);
+}
+
+@section scripts{
+	<script src="~/Scripts/Ng/NewsNgApp.js"></script>
+}
+
+<div id="news_details" ng-controller="EditNewsNgController" ng-cloak ng-init="init(@Model.ToJson())">
+	<!-- title -->
+	@if (this.ViewBag.IsAdmin)
+	{
+		<h1>{{model.title}}<md-button class="md-raised md-primary" ng-click="togglePanel('title')">edit</md-button></h1>
+		<div class="expandable" ng-class="getToggleState('title')">
+			<input type="text" name="Title" ng-model="model.title" placeholder="Sensational news title..." />
+			<md-button class="md-raised md-primary" ng-click="updateNews()">save</md-button>
+		</div>
+	}
+	else
+	{
+		<h1>{{model.title}}</h1>
+	}
+	<div id="content">
+		<div class="item">
+			<div class="left">
+				<!-- images -->
+				@if (this.ViewBag.IsAdmin)
+				{
+					<div>
+						<md-button ng-click="togglePanel('picture')" class="md-raised md-primary">add picture</md-button>
+						<div class="expandable" ng-class="getToggleState('picture')">
+							<input type="text" name="NewImageUrl" ng-model="addPictureLink" placeholder="web-address of image..." />
+							<md-button class="md-raised md-primary" ng-click="addPicture()">save</md-button>
+						</div>
+					</div>
+				}
+				<div ng-repeat="x in model.newsPictures | orderBy: 'sortOrder'">
+					<a data-fancybox="group" href="{{x.imageLink}}" class="fancybox">
+						<img ng-src="{{x.imageLink}}" />
+					</a>
+					@if (this.ViewBag.IsAdmin)
+					{
+						<md-button class="md-raised md-primary" ng-click="deletePicture(x.guid)">delete</md-button>
+					}
+				</div>
+			</div>
+			<div class="right">
+				<!-- text blocks -->
+				<div>
+					@if (this.ViewBag.IsAdmin)
+					{
+						<hr />
+						<div>
+							<md-button class="md-raised md-primary" ng-click="togglePanel('text')">edit text</md-button>
+							<div class="expandable" ng-class="getToggleState('text')">
+								<textarea name="ArticleText" style="width:100%; height:400px;" ng-model="model.text"></textarea>
+								<md-button class="md-raised md-primary" ng-click="updateNews()">save</md-button>
+							</div>
+						</div>
+					}
+					<p ng-repeat="x in textBlocks track by $index">
+						{{x}}
+					</p>
+				</div>
+				<!-- add vehicle -->
+				<div>
+					@if (this.ViewBag.IsAdmin)
+					{
+						<hr />
+						<h2>Related vehicles <md-button class="md-raised md-primary" ng-click="togglePanel('related')">add</md-button></h2>
+						<div class="expandable" ng-class="getToggleState('related')">
+							<md-autocomplete placeholder="type to search..."
+											 md-no-cache="true"
+											 md-selected-item="selectedItem"
+											 md-search-text="searchText"
+											 md-items="item in searchVehicles(searchText)"
+											 md-item-text="item.fullname"
+											 md-selected-item-change="addVehicle()"
+											 md-min-length="3">
+								<md-item-template>
+									{{item.fullname}}
+								</md-item-template>
+								<md-not-found>
+									No vehicles found.
+								</md-not-found>
+							</md-autocomplete>
+						</div>
+					}
+					else
+					{
+						<h2>Related vehicles</h2>
+					}
+					<div id="related_list">
+						<div ng-repeat="x in model.newsVehicles" class="vehicle">
+							<a data-ng-href="@Url.Action("Details", "Vehicles")/{{x.vehicleGuid}}">
+								<img data-ng-src="@Url.Action("Render", "Pictures")/{{x.pictureGuid}}?height=100" />
+								<span>{{x.name}}</span>
+							</a>
+							@if (this.ViewBag.IsAdmin)
+							{
+								<md-button class="md-raised md-primary" ng-click="deleteVehicle(x.vehicleNewsGuid)">delete</md-button>
+							}
+						</div>
+					</div>
+				</div>
+				<!-- source link -->
+				<div>
+					@if (this.ViewBag.IsAdmin)
+					{
+						<hr />
+						<h2>Source<md-button class="md-raised md-primary" ng-click="togglePanel('source')">edit</md-button></h2>
+						<div class="expandable" ng-class="getToggleState('source')">
+							<div>
+								<input type="text" name="SourceLink" ng-model="model.sourceLink" placeholder="source url" />
+							</div>
+							<div>
+								<md-button class="md-raised md-primary" ng-click="updateNews()">save</md-button>
+							</div>
+						</div>
+					}
+					else
+					{
+						<h2>Source</h2>
+					}
+					<a href="{{model.sourceLink}}" target="_blank">{{model.sourceLink}}</a>
+				</div>
+				<div>
+					<a href="@Url.Action("Index", "News")" class="back_to_list">Back to all news...</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
